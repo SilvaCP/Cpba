@@ -57,7 +57,7 @@ class MenuScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         layout = BoxLayout(orientation='vertical', spacing=10, padding=20)
-        layout.add_widget(Label(text="🏋️ Projeto Monstro Treino Avançado", font_size=24))
+        layout.add_widget(Label(text="Projeto Monstro Treino Avançado", font_size=24))
 
         for treino in treinos.keys():
             btn = Button(text=treino)
