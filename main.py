@@ -8,9 +8,10 @@ from kivy.core.audio import SoundLoader
 from datetime import date
 import json
 
-# ---------- Dados dos treinos ----------
+# Dados dos treinos
 treinos = {
-    "Treino A": [
+    
+    "Treino A: (Peito + Tríceps)": [
         "Supino reto: 4 x 10",
         "Supino inclinado: 4 x 10",
         "Crossover: 3 x 10",
@@ -21,7 +22,8 @@ treinos = {
         "Tríceps corda: 3 x até a falha",
         "Abdômen prancha: 3 x 60 segundos"
     ],
-    "Treino B": [
+    
+    "Treino B: (Costas + Bíceps + Antebraço)": [
         "Puxada frente pegada aberta: 4 x 10",
         "Remada baixa: 4 x 10",
         "Remada hammer: 3 x 10",
@@ -31,10 +33,32 @@ treinos = {
         "Rosca alternada martelo: 3 x 10",
         "Prancha com remada: 3 x 12",
         "Alongamento lombar leve"
+    ],
+    
+    "Treino C: (Ombro + Trapézio)": [
+        "Desenvolvimento com halteres 4 x 10",
+        "Elevação frontal 3 x 10",
+        "Elevação lateral 4 x 10",
+        "Remada alta 3 x 10",
+        "Encolhimento de ombros 4 x 15",
+        "Face pull(leve,respeitando a lombar) 3 x 12",
+        "Rosca punho(antebraço) 3 x 15",
+        "Rosca reversa 3 x 12",
+        "Abdômen crunch no colchonete 3 x 15"
+    ],
+    
+    "Treino D: (Pernas (Leve/Moderado)": [
+    "Hack Squat de Costas 4 x 10",
+    "Leg (Perna) Press(ajustado) 5 x 10",
+    "Cadeira extensora 3 x 15",
+    "Cadeira flexora 3 x 15",
+    "Abdução/adbução 3 x 15",
+    "Panturrilha sentada 4 x 20",
+    "Alongamento Lombar e Posterior."
     ]
 }
-
-# ---------- Função para registrar histórico ----------
+'''
+# Função para registrar histórico
 def registrar_treino(nome_treino):
     hoje = str(date.today())
     try:
@@ -51,43 +75,45 @@ def registrar_treino(nome_treino):
 
     with open("historico.json", "w") as f:
         json.dump(dados, f, indent=2)
-
-# ---------- Telas ----------
+'''
+# Telas
 class MenuScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        layout = BoxLayout(orientation='vertical', spacing=10, padding=20)
+        layout = BoxLayout(orientation='vertical') #spacing=10, padding=20)
         layout.add_widget(Label(text="Projeto Monstro Treino Avançado", font_size=24))
 
         for treino in treinos.keys():
             btn = Button(text=treino)
             btn.bind(on_press=self.ir_para_treino)
             layout.add_widget(btn)
-
-        btn_timer = Button(text="Timer de Prancha/Descanso")
-        btn_timer.bind(on_press=self.ir_para_timer)
-        layout.add_widget(btn_timer)
-
-        btn_hist = Button(text="Ver Histórico")
-        btn_hist.bind(on_press=self.ir_para_historico)
-        layout.add_widget(btn_hist)
-
         self.add_widget(layout)
 
+        #    btn_timer = Button(text="Timer de Prancha/Descanso")
+        #    btn_timer.bind(on_press=self.ir_para_timer)
+        #    layout.add_widget(btn_timer)
+
+        #   btn_hist = Button(text="Ver Histórico")
+        #   btn_hist.bind(on_press=self.ir_para_historico)
+        #   layout.add_widget(btn_hist)
+
+        #self.add_widget(layout)
+
+
     def ir_para_treino(self, instance):
-        registrar_treino(instance.text)
+      #  registrar_treino(instance.text)
         self.manager.current = instance.text
 
-    def ir_para_timer(self, instance):
-        self.manager.current = "timer"
+   # def ir_para_timer(self, instance):
+    #    self.manager.current = "timer"
 
-    def ir_para_historico(self, instance):
-        self.manager.current = "historico"
+   # def ir_para_historico(self, instance):
+    #    self.manager.current = "historico"
 
 class TreinoScreen(Screen):
     def __init__(self, nome_treino, **kwargs):
         super().__init__(name=nome_treino, **kwargs)
-        layout = BoxLayout(orientation='vertical', spacing=10, padding=20)
+        layout = BoxLayout(orientation='vertical') #spacing=10, padding=20)
         layout.add_widget(Label(text=nome_treino, font_size=20))
         for exercicio in treinos[nome_treino]:
             layout.add_widget(Label(text=exercicio))
@@ -98,7 +124,7 @@ class TreinoScreen(Screen):
 
     def voltar(self, instance):
         self.manager.current = "menu"
-
+        '''
 class TimerScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(name="timer", **kwargs)
@@ -142,4 +168,12 @@ class TimerScreen(Screen):
         if self.seconds > 0:
             self.seconds -= 1
             self.timer_label.text
-App().run()
+            '''
+class TreinoApp(App):
+    def build(self):
+        sm = ScreenManager()
+        sm.add_widget(MenuScreen(name="menu"))
+        for nome_treino in treinos.keys():
+            sm.add_widget(TreinoScreen(nome_treino))
+        return sm
+TreinoApp().run()
